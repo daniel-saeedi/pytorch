@@ -2,7 +2,7 @@
 # Where to find the links: https://learn.microsoft.com/en-us/visualstudio/releases/2022/release-history#fixed-version-bootstrappers
 
 # BuildTools from S3
-$VS_DOWNLOAD_LINK = "https://s3.amazonaws.com/ossci-windows/vs${env:VS_VERSION}_BuildTools.exe"
+$VS_DOWNLOAD_LINK = "https://aka.ms/vs/17/release/vs_buildtools.exe"
 $COLLECT_DOWNLOAD_LINK = "https://aka.ms/vscollect.exe"
 $VS_INSTALL_ARGS = @("--nocache","--quiet","--wait", "--add Microsoft.VisualStudio.Workload.VCTools",
                                                      "--add Microsoft.Component.MSBuild",
@@ -35,7 +35,6 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-<#
 if ($pathToRemove -ne $null) {
     echo "Uninstalling $pathToRemove."
     $VS_UNINSTALL_ARGS = @("uninstall", "--installPath", "`"$pathToRemove`"", "--quiet","--wait")
@@ -47,7 +46,6 @@ if ($pathToRemove -ne $null) {
     }
     echo "Other versioned BuildTools uninstalled."
 }
-#>
 
 echo "Installing Visual Studio version ${env:VS_VERSION}."
 $process = Start-Process "${PWD}\vs_installer.exe" -ArgumentList $VS_INSTALL_ARGS -NoNewWindow -Wait -PassThru
