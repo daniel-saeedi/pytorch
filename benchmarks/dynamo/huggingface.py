@@ -105,6 +105,59 @@ SKIP = {
 
 # TODO - Fails even after fake tensors
 BATCH_SIZE_DIVISORS = {
+    "AlbertForMaskedLM" : 2,
+    "AlbertForQuestionAnswering" : 2,
+    "AllenaiLongformerBase" : 2,
+    "BartForCausalLM" : 2,
+    "BartForConditionalGeneration" : 2,
+    "BertForMaskedLM" : 2,
+    "BertForQuestionAnswering" : 2,
+    "BigBird" : 2,
+    "BlenderbotForCausalLM" : 2,
+    "BlenderbotForConditionalGeneration" : 2,
+    "BlenderbotSmallForCausalLM" : 2,
+    "BlenderbotSmallForConditionalGeneration" : 2,
+    "CamemBert" : 2,
+    "DebertaForMaskedLM" : 2,
+    "DebertaForQuestionAnswering" : 2,
+    "DebertaV2ForMaskedLM" : 2,
+    "DebertaV2ForQuestionAnswering" : 2,
+    "DistilBertForMaskedLM" : 2,
+    "DistilBertForQuestionAnswering" : 2,
+    "DistillGPT2" : 2,
+    "ElectraForCausalLM" : 2,
+    "ElectraForQuestionAnswering" : 2,
+    "GPT2ForSequenceClassification" : 2,
+    "GPTJForCausalLM" : 2,
+    "GPTJForQuestionAnswering" : 2,
+    "GPTNeoForCausalLM" : 2,
+    "GPTNeoForSequenceClassification" : 2,
+    "GoogleFnet" : 2,
+    "LayoutLMForMaskedLM" : 2,
+    "LayoutLMForSequenceClassification" : 2,
+    "M2M100ForConditionalGeneration" : 2,
+    "MBartForCausalLM" : 2,
+    "MBartForConditionalGeneration" : 2,
+    "MT5ForConditionalGeneration" : 2,
+    "MegatronBertForCausalLM" : 2,
+    "MegatronBertForQuestionAnswering" : 2,
+    "MobileBertForMaskedLM" : 2,
+    "MobileBertForQuestionAnswering" : 2,
+    "OPTForCausalLM" : 2,
+    "PLBartForCausalLM" : 2,
+    "PLBartForConditionalGeneration" : 2,
+    "PegasusForCausalLM" : 2,
+    "PegasusForConditionalGeneration" : 2,
+    "Reformer" : 2,
+    "RobertaForCausalLM" : 2,
+    "RobertaForQuestionAnswering" : 2,
+    "Speech2Text2ForCausalLM" : 2,
+    "T5ForConditionalGeneration" : 2,
+    "T5Small" : 2,
+    "TrOCRForCausalLM" : 2,
+    "XGLMForCausalLM" : 2,
+    "XLNetLMHeadModel" : 2,
+    "YituTechConvBert" : 2,
     # "AlbertForMaskedLM": 2,
     # "AlbertForQuestionAnswering": 2,
     # "AllenaiLongformerBase": 2,
@@ -467,10 +520,10 @@ def refresh_model_names_and_batch_sizes():
         if model_cls in [
             CLIPModel,
             CLIPVisionModel,
-            SwinForImageClassification,
-            SwinForImageClassification,
-            SwinForMaskedImageModeling,
-            SwinModel,
+            # SwinForImageClassification,
+            # SwinForImageClassification,
+            # SwinForMaskedImageModeling,
+            # SwinModel,
             ViTForImageClassification,
             ViTForMaskedImageModeling,
             ViTModel,
@@ -528,8 +581,8 @@ def refresh_model_names_and_batch_sizes():
 
 if __name__ == "__main__":
     # Code to refresh model names and batch sizes
-    if "--find-batch-sizes" not in sys.argv:
-        refresh_model_names_and_batch_sizes()
+    # if "--find-batch-sizes" not in sys.argv:
+    #     refresh_model_names_and_batch_sizes()
     logging.basicConfig(level=logging.WARNING)
     warnings.filterwarnings("ignore")
     main(HuggingfaceRunner())
