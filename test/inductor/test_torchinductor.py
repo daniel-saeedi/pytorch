@@ -4606,6 +4606,28 @@ if HAS_CPU:
         @unittest.skipIf(
             not codecache.valid_vec_isa_list(), "Does not support vectorization"
         )
+        @patch.object(config, "dynamic_shapes", True)
+        @patch.object(torch._dynamo.config, "dynamic_shapes", True)
+        @patch.object(functorch_config, "use_dynamic_shapes", True)
+        def test_vec_dynamic_shapes(self):
+            def fn(x):
+                return torch.softmax(x, -1)
+
+            value = torch.randn((2, 10))
+            with patch.object(config.cpp, "simdlen", None):
+                torch._dynamo.reset()
+                metrics.reset()
+                opt_fn = torch._dynamo.optimize("inductor")(fn)
+                opt_fn(value)
+
+                real_out = fn(value)
+                compiled_out = opt_fn(value)
+                assert same(real_out, compiled_out, equal_nan=True)
+                assert metrics.generated_cpp_vec_kernel_count < 1
+
+        @unittest.skipIf(
+            not codecache.valid_vec_isa_list(), "Does not support vectorization"
+        )
         @patch("torch.cuda.is_available", lambda: False)
         def test_auto_simd(self):
             vec_avx512 = codecache.supported_vec_isa_list[0]
@@ -4652,6 +4674,29 @@ if HAS_CPU:
                 if vec_avx2 in isa_list:
                     isa = codecache.pick_vec_isa()
                     self.assertTrue(isa == vec_avx2)
+
+        @unittest.skipIf(
+            not codecache.valid_vec_isa_list(), "Does not support vectorization"
+        )
+        @patch("torch.cuda.is_available", lambda: False)
+        def test_masked_fill_softmax(self):
+            def fn(value, mask):
+                mask = mask.to(torch.bool)
+                x = torch.masked_fill(value, mask, -33.0)
+                return torch.softmax(x, -1)
+
+            value = torch.randn((2, 9))
+            mask = torch.randint(0, 1, size=(2, 9), dtype=torch.uint8)
+            with patch.object(config.cpp, "simdlen", None):
+                torch._dynamo.reset()
+                metrics.reset()
+                opt_fn = torch._dynamo.optimize("inductor")(fn)
+                opt_fn(value, mask)
+
+                real_out = fn(value, mask)
+                compiled_out = opt_fn(value, mask)
+                assert same(real_out, compiled_out, equal_nan=True)
+                assert metrics.generated_cpp_vec_kernel_count > 1
 
         @unittest.skipIf(
             not codecache.valid_vec_isa_list(), "Does not support vectorization"
